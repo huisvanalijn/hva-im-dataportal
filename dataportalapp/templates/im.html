@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Dosis:wght@200;300;400&family=IBM+Plex+Sans+JP&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'templates/hva.css' %}">
+    <title>HvA DATAPORTAL</title>
+</head>
+<body>
+    <div class='homegrid'>
+        <div class='leftbanner'>
+            <div>
+                <img class='image' src="\static\images\imlogo.png">
+            </div>
+        </div>
+        <div class='main'>
+            <div class='header'>
+                <h1>DATA PORTAL</h1>
+            </div>
+            <div class='mainblock'>
+                <button class='accordion'>Collection Quality</button>
+                <div class='panel'>
+                    <div class='panelgrid'>
+                        <div class='collectionqualitycheckall'>
+                            <div class='text'>
+                                <p>#000</p>
+                            </div>
+                            <div class='text'>
+                                <p>ALL QUALITY CHECKS</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='all'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='line'></div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#001</p>
+                            </div>
+                            <div class='text'>
+                                <p>instellingsnaam != Het Industriemuseum</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='instellingsnaam'" class='run'>run</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class='accordion'>Multimedia Quality</button>
+                <div class='panel'>
+                    check a<br>
+                    check b
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='rightbanner'>
+    </div>
+</div>
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+        });
+    }
+</script>
+</body>
+</html>

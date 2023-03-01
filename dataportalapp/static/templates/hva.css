@@ -1,0 +1,124 @@
+body {
+    background-color: #fefefa;
+}
+
+.homegrid {
+    display: grid;
+    grid-template-columns: 15% 80% 5%;
+}
+
+.image {
+    object-fit: cover;
+    width: 80%;
+    margin-top: 10px;
+    object-position: center center;
+}
+
+.info {
+    font-family: 'Dosis', sans-serif;
+    margin-left: 5px;
+}
+
+.header {
+    width: 100%;
+}
+
+h1 {
+    font-family: 'Dosis', sans-serif;
+    font-size: 3cm;
+    margin-left: 10px;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: 1px;
+    border-radius: 10px;
+    transition: 0.4s;
+    font-family: 'Dosis', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {
+    box-sizing: border-box;
+    width: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+.panelgrid {
+    display: grid;
+    grid-template-rows: max-content;
+    border-radius: 10px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+.collectionqualitycheck {
+    background-color: #f7f6f3;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 5% 85% 10%;
+}
+
+.collectionqualitycheckall {
+    background-color: #f7f6f3;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: 5% 85% 10%;
+    font-weight: bold;
+}
+
+.line {
+    background-color: #d3d0c9;
+    height: 5px;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 5px;
+}
+
+.text {
+    font-family: 'Dosis', sans-serif;
+    font-size: medium;
+    margin: 5px;
+    border: 2px solid black;
+    border-radius: 10px;
+    max-height: fit-content;
+}
+
+p {
+    margin-left: 10px;
+}
+
+.run {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 7.5px;
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    border: 2px solid black;
+    font-family: 'Dosis', sans-serif;
+    font-size: medium;
+    background-color: #ebe6d9;
+    position: relative;
+}
+
+.run:hover {
+	background:linear-gradient(to bottom, #d3d0c9 5%, #d3d0c9 100%);
+	background-color:#d3d0c9;
+    cursor: pointer;
+}
+
