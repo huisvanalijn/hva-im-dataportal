@@ -9,6 +9,8 @@ from django.contrib import messages
 
 #when deploying change to: df_collectie = pd.read_csv(r'/home/floreverkest/hva-im-dataportal/static/data/hva/collectie.csv', delimiter=';', low_memory=False)
 df_collectie = pd.read_csv(r'dataportalapp\static\data\hva\collectie.csv', delimiter=';', low_memory=False)
+df_thesaurus = pd.read_csv(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\thesaurus.csv', delimiter=';', low_memory=False)
+
 
 #if columnnames change (due to different CMS), change the names here:
 df_collectie['instelling.naam'] = df_collectie['instelling.naam']
@@ -207,6 +209,43 @@ df_026_07 = df_026_07[~df_026_07["associatie.onderwerp"].str.contains('|'.join(s
 frames = [df_026_01, df_026_02, df_026_03, df_026_04, df_026_05, df_026_06, df_026_07]
 df_026 = pd.concat(frames)
 
+# 9. THESAURUS
+
+# bron afwezig of niet correct
+df_t01 = df_thesaurus[df_thesaurus['bron'] != 'http://vocab.getty.edu/aat/']
+df_t01 = df_t01[df_t01['bron'] != 'https://id.erfgoed.net/themas/']
+df_t01 = df_t01[df_t01['bron'] != 'http://vocab.getty.edu/tgn/']
+df_t01 = df_t01[df_t01['bron'] != 'https://www.wikidata.org/entity/']
+df_t01 = df_t01[df_t01['bron'] != 'https://id.erfgoed.net/erfgoedobjecten/']
+
+# term komt meermaals voor
+df_t02 = df_thesaurus['term'].value_counts()
+df_t02 = df_t02.loc[lambda x: x > 1]
+df_t02 = pd.DataFrame({'term': df_t02.index, 'number of occurences': df_t02.values})
+
+# externe autoriteit komt meermaals voor
+df_t03 = df_thesaurus['term.nummer'].value_counts()
+df_t03 = df_t03.loc[lambda x: x > 1]
+df_t03 = pd.DataFrame({'term': df_t03.index, 'number of occurences': df_t03.values})
+
+# foutief wikidatanummer
+df_t04 = df_thesaurus[df_thesaurus['bron'] == 'https://www.wikidata.org/entity/']
+df_t04 = df_t04[~df_t04["term.nummer"].str.contains("Q", na=False)]
+
+#foutief AAT-nummer
+df_t05 = df_thesaurus[df_thesaurus['bron'] == 'http://vocab.getty.edu/aat/']
+df_t05 = df_t05[~df_t05['term.nummer'].isna()]
+df_t05 = df_t05['term.nummer'].astype(int)
+df_t05 = pd.DataFrame({'term': df_t05.values})
+df_t05 = df_t05[(df_t05['term'] > 999999999) | (df_t05['term'] < 100000000)]
+
+# foutief TGN-nummer
+df_t06 = df_thesaurus[df_thesaurus['bron'] == 'http://vocab.getty.edu/tgn/']
+df_t06 = df_t06[~df_t06['term.nummer'].isna()]
+df_t06 = df_t06['term.nummer'].astype(int)
+df_t06 = pd.DataFrame({'term': df_t06.values})
+df_t06 = df_t06[(df_t06['term'] > 9999999) | (df_t06['term'] < 1000000)]
+
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
@@ -245,6 +284,13 @@ def all(request):
     ws.append(['#023', 'ontbrekende/foutieve toestand'])
     ws.append(['#024', 'ontbrekende/foutieve verwervingsmethode'])
     ws.append(['#025', 'titel bevat Gent AND NOT associatie.onderwerp = Gent'])
+    ws.append(['#026', 'associatie wereldtentoonstelling Brussel, Antwerpen, Gent, Luik, Parijs, Amsterdam, Londen en niet stad als associatie'])
+    ws.append(['#t01', 'thesaurus bron afwezig of niet correct'])
+    ws.append(['#t02', 'thesaurus term komt meermaals voor'])
+    ws.append(['#t03', 'thesaurus externe autoriteit komt meermaals voor'])
+    ws.append(['#t04', 'thesaurus foutief wikidatanummer'])
+    ws.append(['#t05', 'thesaurus foutief AAT-nummer'])
+    ws.append(['#t06', 'thesaurus foutief TGN-nummer'])
 
     ws.column_dimensions['A'].width = 25
     ws.column_dimensions['B'].width = 60
@@ -446,6 +492,63 @@ def all(request):
     else:
         ws = wb.create_sheet("#025")
         rows = dataframe_to_rows(df_025, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    if df_026.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#026")
+        rows = dataframe_to_rows(df_026, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t01.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T01")
+        rows = dataframe_to_rows(df_t01, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t02.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T02")
+        rows = dataframe_to_rows(df_t02, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t03.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T03")
+        rows = dataframe_to_rows(df_t03, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t04.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T04")
+        rows = dataframe_to_rows(df_t04, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t05.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T05")
+        rows = dataframe_to_rows(df_t05, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    if df_t06.empty == True:
+        print('empty dataframe')
+    else:
+        ws = wb.create_sheet("#T06")
+        rows = dataframe_to_rows(df_t06, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)
@@ -888,6 +991,108 @@ def wereldtentoonstelling(request):
         ws = wb.active
         ws.title = '#026'
         rows = dataframe_to_rows(df_026, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def bron(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T01.xlsx"'
+    wb = Workbook()
+    if df_t01.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T01'
+        rows = dataframe_to_rows(df_t01, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def term(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T02.xlsx"'
+    wb = Workbook()
+    if df_t02.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T02'
+        rows = dataframe_to_rows(df_t02, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def externeautoriteit(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T03.xlsx"'
+    wb = Workbook()
+    if df_t03.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T03'
+        rows = dataframe_to_rows(df_t03, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def wikidata(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T04.xlsx"'
+    wb = Workbook()
+    if df_t04.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T04'
+        rows = dataframe_to_rows(df_t04, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def aat(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T05.xlsx"'
+    wb = Workbook()
+    if df_t05.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T05'
+        rows = dataframe_to_rows(df_t05, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def tgn(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#T06.xlsx"'
+    wb = Workbook()
+    if df_t06.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#T06'
+        rows = dataframe_to_rows(df_t06, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)

@@ -31,5 +31,11 @@ urlpatterns = [
     path('toestand', views.toestand),
     path('verwerving', views.verwerving),
     path('variatitel', views.variatitel),
-    path('wereldtentoonstelling', views.wereldtentoonstelling)
+    path('wereldtentoonstelling', views.wereldtentoonstelling),
+    path('bron', views.bron),
+    path('term', views.term),
+    path('externeautoriteit', views.externeautoriteit),
+    path('wikidata', views.wikidata),
+    path('aat', views.aat),
+    path('tgn', views.tgn)
 ]
