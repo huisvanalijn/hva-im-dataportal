@@ -292,6 +292,8 @@ df_a03 = df_collectie[df_collectie['reproductie.referentie'].isna()]
 df_r03 = df_a03[df_a03['objectnummer'].isin(df_rschijf['objectnummer'])]
 df_r03 = pd.merge(df_r03, df_rschijf, on="objectnummer", how='outer')
 df_r03 = df_r03[~df_r03['instelling.naam'].isna()]
+df_008 = pd.merge(df_008, df_rschijf, on="objectnummer", how="outer")
+df_008 = df_008[~df_008['instelling.naam'].isna()]
 
 # Create your views here.
 def home(request):
