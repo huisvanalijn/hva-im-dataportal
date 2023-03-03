@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dataportalapp',
-    'lockdown'
 ]
 
 
@@ -50,10 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lockdown.middleware.LockdownMiddleware',
 ]
-
-LOCKDOWN_PASSWORDS = ('kraanlei65')
 
 ROOT_URLCONF = 'dataportal.urls'
 
