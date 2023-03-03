@@ -10,7 +10,7 @@ from django.contrib import messages
 #when deploying change to: df_collectie = pd.read_csv(r'/home/floreverkest/hva-im-dataportal/static/data/hva/collectie.csv', delimiter=';', low_memory=False)
 df_collectie = pd.read_csv(r'dataportalapp\static\data\hva\collectie.csv', delimiter=';', low_memory=False)
 df_thesaurus = pd.read_csv(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\thesaurus.csv', delimiter=';', low_memory=False)
-
+df_rschijf = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\rschijf.xlsx')
 
 #if columnnames change (due to different CMS), change the names here:
 df_collectie['instelling.naam'] = df_collectie['instelling.naam']
@@ -245,6 +245,53 @@ df_t06 = df_t06[~df_t06['term.nummer'].isna()]
 df_t06 = df_t06['term.nummer'].astype(int)
 df_t06 = pd.DataFrame({'term': df_t06.values})
 df_t06 = df_t06[(df_t06['term'] > 9999999) | (df_t06['term'] < 1000000)]
+
+df_rschijf = df_rschijf[(df_rschijf["objectnummer"].str.startswith("FO-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("DB-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("F0", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("AU-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("19", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("20", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("DIA-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("AF", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("RE-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("VI-", na=False))]
+
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("WERKMAP", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("EXTERNE SCHIJVEN", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"_", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"A3", na=False)]
+df_r04 = df_rschijf[df_rschijf['objectnummer'].str.contains(r"_001", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['objectnummer'].str.contains(r"_", na=False)]
+df_r05 = df_rschijf[(df_rschijf['objectnummer'].str.contains("a", na=False))
+                    | (df_rschijf['objectnummer'].str.contains("b", na=False))
+                    | (df_rschijf['objectnummer'].str.contains("kopie", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"\(", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 2", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"\)", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"c", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"d", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 3", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 4", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"C", na=False))]
+df_rschijf = df_rschijf[~((df_rschijf['objectnummer'].str.contains("a", na=False))
+                    | (df_rschijf['objectnummer'].str.contains("b", na=False))
+                    | (df_rschijf['objectnummer'].str.contains("kopie", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"\(", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 2", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"\)", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"c", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"d", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 3", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r" 4", na=False))
+                    | (df_rschijf['objectnummer'].str.contains(r"C", na=False)))]
+
+df_r01 = df_rschijf[~df_rschijf['objectnummer'].isin(df_collectie['objectnummer'])]
+df_r02 = df_collectie[~df_collectie['objectnummer'].isin(df_rschijf['objectnummer'])]
+df_a03 = df_collectie[df_collectie['reproductie.referentie'].isna()]
+df_r03 = df_a03[df_a03['objectnummer'].isin(df_rschijf['objectnummer'])]
+df_r03 = pd.merge(df_r03, df_rschijf, on="objectnummer", how='outer')
+df_r03 = df_r03[~df_r03['instelling.naam'].isna()]
 
 # Create your views here.
 def home(request):
@@ -1099,5 +1146,91 @@ def tgn(request):
     wb.save(response)
     return response
 
+def rschijf(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R01.xlsx"'
+    wb = Workbook()
+    if df_r01.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R01'
+        rows = dataframe_to_rows(df_r01, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def adlib(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R02.xlsx"'
+    wb = Workbook()
+    if df_r02.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R02'
+        rows = dataframe_to_rows(df_r02, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def bestandsnaam(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R05.xlsx"'
+    wb = Workbook()
+    if df_r05.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R05'
+        rows = dataframe_to_rows(df_r05, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def start(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R04.xlsx"'
+    wb = Workbook()
+    if df_r04.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R04'
+        rows = dataframe_to_rows(df_r04, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def afad(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R03.xlsx"'
+    wb = Workbook()
+    if df_r03.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R03'
+        rows = dataframe_to_rows(df_r03, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
 def im(request):
     return render(request, 'im.html')
+

@@ -37,5 +37,10 @@ urlpatterns = [
     path('externeautoriteit', views.externeautoriteit),
     path('wikidata', views.wikidata),
     path('aat', views.aat),
-    path('tgn', views.tgn)
+    path('tgn', views.tgn),
+    path('rschijf', views.rschijf),
+    path('adlib', views.adlib),
+    path('bestandsnaam', views.bestandsnaam),
+    path('start', views.start),
+    path('afad', views.afad)
 ]

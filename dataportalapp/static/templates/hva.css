@@ -71,6 +71,13 @@ h1 {
     grid-template-columns: 5% 85% 10%;
 }
 
+.rschijfcheck {
+    background-color: #f7f6f3;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 5% 85% 10%;
+}
+
 .collectionqualitycheckall {
     background-color: #f7f6f3;
     border-radius: 10px;
