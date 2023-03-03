@@ -246,6 +246,22 @@ df_t06 = df_t06['term.nummer'].astype(int)
 df_t06 = pd.DataFrame({'term': df_t06.values})
 df_t06 = df_t06[(df_t06['term'] > 9999999) | (df_t06['term'] < 1000000)]
 
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("WERKMAP", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("EXTERNE SCHIJVEN", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"_", na=False)]
+df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"A3", na=False)]
+
+df_r06 = df_rschijf[~((df_rschijf["objectnummer"].str.startswith("FO-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("DB-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("F0", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("AU-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("19", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("20", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("DIA-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("AF", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("RE-", na=False))
+                        | (df_rschijf["objectnummer"].str.startswith("VI-", na=False)))]
+
 df_rschijf = df_rschijf[(df_rschijf["objectnummer"].str.startswith("FO-", na=False))
                         | (df_rschijf["objectnummer"].str.startswith("DB-", na=False))
                         | (df_rschijf["objectnummer"].str.startswith("F0", na=False))
@@ -257,10 +273,6 @@ df_rschijf = df_rschijf[(df_rschijf["objectnummer"].str.startswith("FO-", na=Fal
                         | (df_rschijf["objectnummer"].str.startswith("RE-", na=False))
                         | (df_rschijf["objectnummer"].str.startswith("VI-", na=False))]
 
-df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("WERKMAP", na=False)]
-df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("EXTERNE SCHIJVEN", na=False)]
-df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"_", na=False)]
-df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains(r"A3", na=False)]
 df_r04 = df_rschijf[df_rschijf['objectnummer'].str.contains(r"_001", na=False)]
 df_rschijf = df_rschijf[~df_rschijf['objectnummer'].str.contains(r"_", na=False)]
 df_r05 = df_rschijf[(df_rschijf['objectnummer'].str.contains("a", na=False))
@@ -1227,6 +1239,23 @@ def afad(request):
         ws = wb.active
         ws.title = '#R03'
         rows = dataframe_to_rows(df_r03, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def naamstart(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R06.xlsx"'
+    wb = Workbook()
+    if df_r06.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R06'
+        rows = dataframe_to_rows(df_r06, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)

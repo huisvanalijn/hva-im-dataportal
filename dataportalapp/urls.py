@@ -42,5 +42,6 @@ urlpatterns = [
     path('adlib', views.adlib),
     path('bestandsnaam', views.bestandsnaam),
     path('start', views.start),
-    path('afad', views.afad)
+    path('afad', views.afad),
+    path('naamstart', views.naamstart)
 ]
