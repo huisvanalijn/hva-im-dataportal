@@ -23,12 +23,13 @@ urlpatterns = [
     path('afmeting', views.afmeting),
     path('afmetingo', views.afmetingo),
     path('afmetingd', views.afmetingd),
-    path('afmetingd', views.afmetingdd),
+    path('afmetingdd', views.afmetingdd),
     path('rechten', views.rechten),
     path('rechtentype', views.rechtentype),
     path('rechtenref', views.rechtenref),
     path('pd', views.pd),
     path('toestand', views.toestand),
     path('verwerving', views.verwerving),
-    path('variatitel', views.variatitel)
+    path('variatitel', views.variatitel),
+    path('wereldtentoonstelling', views.wereldtentoonstelling)
 ]

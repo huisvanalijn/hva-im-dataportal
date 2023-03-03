@@ -10,6 +10,11 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'templates/hva.css' %}">
     <title>HvA DATAPORTAL</title>
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+        {% endfor %}
+    {% endif %}
 </head>
 <body>
     <div class='homegrid'>
@@ -311,6 +316,17 @@
                             </div>
                             <div>
                                 <button onclick="location.href='variatitel'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#026</p>
+                            </div>
+                            <div class='text'>
+                                <p>Associatie wereldtentoonstelling Brussel, Antwerpen, Gent, Luik, Parijs, Amsterdam, Londen en niet stad als associatie</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='wereldtentoonstelling'" class='run'>run</button>
                             </div>
                         </div>
                     </div>

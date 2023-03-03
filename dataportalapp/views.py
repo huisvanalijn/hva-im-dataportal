@@ -4,6 +4,8 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from django.http import HttpResponse
 import datetime
+from django.contrib import messages
+
 
 #when deploying change to: df_collectie = pd.read_csv(r'/home/floreverkest/hva-im-dataportal/static/data/hva/collectie.csv', delimiter=';', low_memory=False)
 df_collectie = pd.read_csv(r'dataportalapp\static\data\hva\collectie.csv', delimiter=';', low_memory=False)
@@ -180,6 +182,30 @@ df_024 = df_024[df_024['verwerving.methode'] != 'bruikleen']
 
 df_025 = df_collectie[df_collectie["titel"].str.contains("Gent", na=False)]
 df_025 = df_025[~df_025["associatie.onderwerp"].str.contains("Gent", na=False)]
+
+df_026_01 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Brussel", na=False)]
+search = ['$Brussel', 'Brussel$']
+df_026_01 = df_026_01[~df_026_01["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_02 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Antwerpen", na=False)]
+search = ['$Antwerpen', 'Antwerpen$']
+df_026_02 = df_026_02[~df_026_02["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_03 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Gent", na=False)]
+search = ['$Gent', 'Gent$']
+df_026_03 = df_026_03[~df_026_03["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_04 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Luik", na=False)]
+search = ['$Luik', 'Luik$']
+df_026_04 = df_026_04[~df_026_04["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_05 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Parijs", na=False)]
+search = ['$Parijs', 'Parijs$']
+df_026_05 = df_026_05[~df_026_05["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_06 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Londen", na=False)]
+search = ['$Londen', 'Londen$']
+df_026_06 = df_026_06[~df_026_06["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+df_026_07 = df_collectie[df_collectie["associatie.onderwerp"].str.contains("Wereldtentoonstelling Amsterdam", na=False)]
+search = ['$Amsterdam', 'Amsterdam$']
+df_026_07 = df_026_07[~df_026_07["associatie.onderwerp"].str.contains('|'.join(search), na=False)]
+frames = [df_026_01, df_026_02, df_026_03, df_026_04, df_026_05, df_026_06, df_026_07]
+df_026 = pd.concat(frames)
 
 # Create your views here.
 def home(request):
@@ -431,9 +457,8 @@ def instellingsnaam(request):
     response['Content-Disposition'] = 'attachment; filename="#001.xlsx"'
     wb = Workbook()
     if df_001.empty == True:
-        ws = wb.active
-        ws.title = '#001'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#001'
@@ -449,9 +474,8 @@ def instellingscode(request):
     response['Content-Disposition'] = 'attachment; filename="#002.xlsx"'
     wb = Workbook()
     if df_002.empty == True:
-        ws = wb.active
-        ws.title = '#002'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#002'
@@ -467,9 +491,8 @@ def objectnummer(request):
     response['Content-Disposition'] = 'attachment; filename="#003.xlsx"'
     wb = Workbook()
     if df_003.empty == True:
-        ws = wb.active
-        ws.title = '#003'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#003'
@@ -485,9 +508,8 @@ def objectnmr(request):
     response['Content-Disposition'] = 'attachment; filename="#004.xlsx"'
     wb = Workbook()
     if df_004.empty == True:
-        ws = wb.active
-        ws.title = '#004'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#004'
@@ -503,9 +525,8 @@ def onderscheidendkenmerk(request):
     response['Content-Disposition'] = 'attachment; filename="#005.xlsx"'
     wb = Workbook()
     if df_005.empty == True:
-        ws = wb.active
-        ws.title = '#005'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#005'
@@ -521,9 +542,8 @@ def objectnaam(request):
     response['Content-Disposition'] = 'attachment; filename="#006.xlsx"'
     wb = Workbook()
     if df_006.empty == True:
-        ws = wb.active
-        ws.title = '#006'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#006'
@@ -539,9 +559,8 @@ def titel(request):
     response['Content-Disposition'] = 'attachment; filename="#007.xlsx"'
     wb = Workbook()
     if df_007.empty == True:
-        ws = wb.active
-        ws.title = '#007'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#007'
@@ -557,9 +576,8 @@ def afbeelding(request):
     response['Content-Disposition'] = 'attachment; filename="#008.xlsx"'
     wb = Workbook()
     if df_008.empty == True:
-        ws = wb.active
-        ws.title = '#008'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#008'
@@ -575,9 +593,8 @@ def associatie(request):
     response['Content-Disposition'] = 'attachment; filename="#009.xlsx"'
     wb = Workbook()
     if df_009.empty == True:
-        ws = wb.active
-        ws.title = '#009'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#009'
@@ -593,9 +610,8 @@ def associatieplaats(request):
     response['Content-Disposition'] = 'attachment; filename="#010.xlsx"'
     wb = Workbook()
     if df_010.empty == True:
-        ws = wb.active
-        ws.title = '#010'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#010'
@@ -611,9 +627,8 @@ def associatieperiode(request):
     response['Content-Disposition'] = 'attachment; filename="#011.xlsx"'
     wb = Workbook()
     if df_011.empty == True:
-        ws = wb.active
-        ws.title = '#011'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#011'
@@ -629,9 +644,8 @@ def datum(request):
     response['Content-Disposition'] = 'attachment; filename="#012.xlsx"'
     wb = Workbook()
     if df_012.empty == True:
-        ws = wb.active
-        ws.title = '#012'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#012'
@@ -647,9 +661,8 @@ def datumgroter(request):
     response['Content-Disposition'] = 'attachment; filename="#013.xlsx"'
     wb = Workbook()
     if df_013.empty == True:
-        ws = wb.active
-        ws.title = '#013'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#013'
@@ -665,9 +678,8 @@ def datumformat(request):
     response['Content-Disposition'] = 'attachment; filename="#014.xlsx"'
     wb = Workbook()
     if df_014.empty == True:
-        ws = wb.active
-        ws.title = '#014'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#014'
@@ -683,9 +695,8 @@ def afmeting(request):
     response['Content-Disposition'] = 'attachment; filename="#015.xlsx"'
     wb = Workbook()
     if df_015.empty == True:
-        ws = wb.active
-        ws.title = '#015'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#015'
@@ -701,9 +712,8 @@ def afmetingo(request):
     response['Content-Disposition'] = 'attachment; filename="#016.xlsx"'
     wb = Workbook()
     if df_016.empty == True:
-        ws = wb.active
-        ws.title = '#016'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#016'
@@ -719,9 +729,8 @@ def afmetingd(request):
     response['Content-Disposition'] = 'attachment; filename="#017.xlsx"'
     wb = Workbook()
     if df_017.empty == True:
-        ws = wb.active
-        ws.title = '#017'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#017'
@@ -737,9 +746,8 @@ def afmetingdd(request):
     response['Content-Disposition'] = 'attachment; filename="#018.xlsx"'
     wb = Workbook()
     if df_018.empty == True:
-        ws = wb.active
-        ws.title = '#018'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#018'
@@ -747,17 +755,16 @@ def afmetingdd(request):
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)
-    wb.save(response)
-    return response
+        wb.save(response)
+        return response
 
 def rechten(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="#019.xlsx"'
     wb = Workbook()
     if df_019.empty == True:
-        ws = wb.active
-        ws.title = '#019'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#019'
@@ -773,9 +780,8 @@ def rechtentype(request):
     response['Content-Disposition'] = 'attachment; filename="#020.xlsx"'
     wb = Workbook()
     if df_020.empty == True:
-        ws = wb.active
-        ws.title = '#020'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#020'
@@ -791,9 +797,8 @@ def rechtenref(request):
     response['Content-Disposition'] = 'attachment; filename="#021.xlsx"'
     wb = Workbook()
     if df_021.empty == True:
-        ws = wb.active
-        ws.title = '#021'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#021'
@@ -809,9 +814,8 @@ def pd(request):
     response['Content-Disposition'] = 'attachment; filename="#022.xlsx"'
     wb = Workbook()
     if df_022.empty == True:
-        ws = wb.active
-        ws.title = '#022'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#022'
@@ -827,9 +831,8 @@ def toestand(request):
     response['Content-Disposition'] = 'attachment; filename="#023.xlsx"'
     wb = Workbook()
     if df_023.empty == True:
-        ws = wb.active
-        ws.title = '#023'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#023'
@@ -845,9 +848,8 @@ def verwerving(request):
     response['Content-Disposition'] = 'attachment; filename="#024.xlsx"'
     wb = Workbook()
     if df_024.empty == True:
-        ws = wb.active
-        ws.title = '#024'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#024'
@@ -863,13 +865,29 @@ def variatitel(request):
     response['Content-Disposition'] = 'attachment; filename="#025.xlsx"'
     wb = Workbook()
     if df_025.empty == True:
-        ws = wb.active
-        ws.title = '#025'
-        ws['A1'] = "Empty Dataframe"
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
     else:
         ws = wb.active
         ws.title = '#025'
         rows = dataframe_to_rows(df_025, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def wereldtentoonstelling(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#026.xlsx"'
+    wb = Workbook()
+    if df_026.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#026'
+        rows = dataframe_to_rows(df_026, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)
