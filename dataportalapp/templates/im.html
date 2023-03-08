@@ -26,35 +26,431 @@
                 <button class='accordion'>Collection Quality</button>
                 <div class='panel'>
                     <div class='panelgrid'>
-                        <div class='collectionqualitycheckall'>
-                            <div class='text'>
-                                <p>#000</p>
-                            </div>
-                            <div class='text'>
-                                <p>ALL QUALITY CHECKS</p>
-                            </div>
-                            <div>
-                                <button onclick="location.href='all'" class='run'>run</button>
-                            </div>
-                        </div>
-                        <div class='line'></div>
                         <div class='collectionqualitycheck'>
                             <div class='text'>
                                 <p>#001</p>
                             </div>
                             <div class='text'>
-                                <p>instellingsnaam != Het Industriemuseum</p>
+                                <p>instellingsnaam != Industriemuseum</p>
                             </div>
                             <div>
-                                <button onclick="location.href='instellingsnaam'" class='run'>run</button>
+                                <button onclick="location.href='i001'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#002</p>
+                            </div>
+                            <div class='text'>
+                                <p>Ontbrekende collectie</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i002'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#003</p>
+                            </div>
+                            <div class='text'>
+                                <p>objectnummer start niet met: 'AU', 'F', 'D', 'DC', 'V', 'VI', 'AF', 'RE', 'PK'</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i003'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#004</p>
+                            </div>
+                            <div class='text'>
+                                <p>lengte objectnummer niet correct</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i004'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#005</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende objectnaam</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i005'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#006</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende titel</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i006'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#007</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende afbeelding</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i007'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#008</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekend associatie onderwerp</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i008'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#009</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende soort associatie onderwerp</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i009'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#010</p>
+                            </div>
+                            <div class='text'>
+                                <p>vervaardiging datering niet in associatie periode</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i010'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#011</p>
+                            </div>
+                            <div class='text'>
+                                <p>vervaardiging datum eind > datum begin</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i011'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#012</p>
+                            </div>
+                            <div class='text'>
+                                <p>geen datering format</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i012'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#013</p>
+                            </div>
+                            <div class='text'>
+                                <p>foutieve datum vervaardiging begin precisie</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i013'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#014</p>
+                            </div>
+                            <div class='text'>
+                                <p>foutieve datum vervaardiging eind precisie</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i014'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#015</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende afmeting</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i015'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#016</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende materiaalsoort</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i016'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#017</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende rechtenstatus</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i017'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#018</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende machtigingsstatus</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i018'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#019</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekend formulier rechten</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i019'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#020</p>
+                            </div>
+                            <div class='text'>
+                                <p>records in publiek domein</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i020'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#021</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende uitleg bij bijzonderheden voor records in PD</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i021'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#022</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende/foutieve toestand</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i022'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#023</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende/foutieve verwervingsmethode</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i023'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#024</p>
+                            </div>
+                            <div class='text'>
+                                <p>titel eindigt op .</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i024'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#025</p>
+                            </div>
+                            <div class='text'>
+                                <p>titel bevat Gent AND NOT associatie.onderwerp = Gent</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i025'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#026</p>
+                            </div>
+                            <div class='text'>
+                                <p>titel start niet met hoofdletter</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i026'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#027</p>
+                            </div>
+                            <div class='text'>
+                                <p>titel bevat ( of )</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='i027'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='line'></div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T01</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus bron afwezig of niet correct</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it01'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T02</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus term komt meermaals voor</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it02'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T03</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus externe autoriteit komt meermaals voor</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it03'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T04</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus foutief wikidatanummer</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it04'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T05</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus foutief AAT-nummer</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it05'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='collectionqualitycheck'>
+                            <div class='text'>
+                                <p>#T06</p>
+                            </div>
+                            <div class='text'>
+                                <p>thesaurus foutief TGN-nummer</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='it06'" class='run'>run</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <button class='accordion'>Multimedia Quality</button>
                 <div class='panel'>
-                    check a<br>
-                    check b
+                    <div class='panelgrid'>
+                        <div class='rschijfcheck'>
+                            <div class='text'>
+                                <p>#R01</p>
+                            </div>
+                            <div class='text'>
+                                <p>afbeeldingen op r-schijf zonder registratie in adlib</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='ir01'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='rschijfcheck'>
+                            <div class='text'>
+                                <p>#R02</p>
+                            </div>
+                            <div class='text'>
+                                <p>records in adlib zonder afbeelding op de r-schijf</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='ir02'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='rschijfcheck'>
+                            <div class='text'>
+                                <p>#R03</p>
+                            </div>
+                            <div class='text'>
+                                <p>ontbrekende afbeelding in adlib, gevonden op rschijf</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='ir03'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='rschijfcheck'>
+                            <div class='text'>
+                                <p>#R04</p>
+                            </div>
+                            <div class='text'>
+                                <p>foutieve bestandsnaam</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='ir04'" class='run'>run</button>
+                            </div>
+                        </div>
+                        <div class='rschijfcheck'>
+                            <div class='text'>
+                                <p>#R05</p>
+                            </div>
+                            <div class='text'>
+                                <p>foutieve start bestandsnaam</p>
+                            </div>
+                            <div>
+                                <button onclick="location.href='ir05'" class='run'>run</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
