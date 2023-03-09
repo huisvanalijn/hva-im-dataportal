@@ -131,7 +131,8 @@ def i014():
 
 # ontbrekende afmetingen
 def i015():
-    df_015 = df_collectie[df_collectie['afmeting.waarde'].isna()]
+    df_015 = df_collectie[df_collectie['objectnaam.type'] != 'born digital collecties']
+    df_015 = df_015[df_015['afmeting.waarde'].isna()]
     return df_015
 
 # ontbrekend materiaal
