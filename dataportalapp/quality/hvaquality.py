@@ -199,6 +199,7 @@ def h013():
 # datering niet in correcte formaat
 def h014():
     df_014 = df_collectie[df_collectie['vervaardiging.datum.begin'].notna()]
+    df_014 = df_014[~df_014['vervaardiging.plaats'].str.contains(r"\$", na=False)]
     df_014 = df_014.drop(df_014[pd.to_datetime(df_014['vervaardiging.datum.begin'], format='%Y-%m',
                                             errors='coerce').notna()].index)
     df_014 = df_014[~df_014['vervaardiging.datum.begin'].str.startswith('14')]

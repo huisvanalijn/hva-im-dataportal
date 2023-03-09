@@ -103,6 +103,7 @@ def i011():
 # foutief datum formaat
 def i012():
     df_012 = df_collectie[df_collectie['vervaardiging.datum.begin'].notna()]
+    df_012 = df_012[~df_012['vervaardiging.plaats'].str.contains(r"\$", na=False)]
     df_012 = df_012.drop(df_012[pd.to_datetime(df_012['vervaardiging.datum.begin'], format='%Y-%m',
                                             errors='coerce').notna()].index)
     df_012 = df_012[~df_012['vervaardiging.datum.begin'].str.startswith('14')]
