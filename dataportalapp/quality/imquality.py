@@ -188,7 +188,8 @@ def i021():
 # TO DO!!! filteren op objectnaam type: born digital collecties
 #foutieve toestand
 def i022():
-    df_022 = df_collectie[~df_collectie['toestand'].str.contains("goed", na=False)]
+    df_022 = df_collectie[df_collectie['objectnaam.type'] != 'born digital collecties']
+    df_022 = df_022[~df_022['toestand'].str.contains("goed", na=False)]
     df_022 = df_022[~df_022['toestand'].str.contains("matig", na=False)]
     df_022 = df_022[~df_022['toestand'].str.contains("slecht", na=False)]
     df_022 = df_022[~df_022['toestand'].str.contains("redelijk", na=False)]
