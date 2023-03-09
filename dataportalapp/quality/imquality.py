@@ -174,6 +174,7 @@ def i020():
     df_020_2['vervaardiging.datum.eind'] = df_020_2['vervaardiging.datum.eind'].astype(str)
     df_020_2['vervaardiging.datum.eind'] = df_020_2['vervaardiging.datum.eind'].str[:4]
     df_020_2 = df_020_2[df_020_2['vervaardiging.datum.eind'] != '$']
+    df_020_2 = df_020_2[~df_020_2['vervaardiging.datum.begin'].str.contains(r"\$", na=False)]
     df_020_2['vervaardiging.datum.eind'] = df_020_2['vervaardiging.datum.eind'].astype(int)
     df_020_2 = df_020_2[df_020_2['vervaardiging.datum.eind'] <= (year - 150)]
 
