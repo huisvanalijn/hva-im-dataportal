@@ -283,7 +283,7 @@ def h022():
 # ontbrekende/foutieve toestand
 def h023():
     df_023 = df_collectie[df_collectie['onderscheidende_kenmerken'] != 'DIGITALE COLLECTIE']
-    df_023 = df_collectie[~df_collectie['toestand'].str.contains("goed", na=False)]
+    df_023 = df_023[~df_023['toestand'].str.contains("goed", na=False)]
     df_023 = df_023[~df_023['toestand'].str.contains("matig", na=False)]
     df_023 = df_023[~df_023['toestand'].str.contains("slecht", na=False)]
     return df_023
