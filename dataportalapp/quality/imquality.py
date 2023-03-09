@@ -4,6 +4,8 @@ import datetime
 df_collectie = pd.read_csv(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\im\collectie.csv', delimiter=';',
                            low_memory=False)
 df_thesaurus = pd.read_csv(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\im\thesaurus.csv', delimiter=';', low_memory=False)
+
+df_bron = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\im\bron.xlsx')
 df_rschijf = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\im\rschijf.xlsx')
 df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("WERKMAP", na=False)]
 df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("EXTERNE SCHIJVEN", na=False)]
@@ -35,6 +37,9 @@ df_rschijflimited = df_rschijflimited[~((df_rschijflimited['objectnummer'].str.c
                     | (df_rschijf['objectnummer'].str.contains(r"C", na=False)))]
 
 year = datetime.datetime.now().year
+
+df_collectie['wijziging.naam'] = df_collectie['wijziging.naam'].str.split('$').str[0]
+df_collectie['wijziging.datum'] = df_collectie['wijziging.datum'].str.split('$').str[0]
 
 ##################################################################################################################################################
 # 1. COLLECTIE
@@ -283,14 +288,17 @@ def it06():
 # 10. R-SCHIJF
 ##################################################################################################################################################
 
+#afbeeldingen op rschijf niet in adlib
 def ir01():
     df_r01 = df_rschijflimited[~df_rschijflimited['objectnummer'].isin(df_collectie['objectnummer'])]
     return df_r01
 
+#afbeeldingen in adlib niet op rschijf
 def ir02():
     df_r02 = df_collectie[~df_collectie['objectnummer'].isin(df_rschijflimited['objectnummer'])]
     return df_r02
 
+#ontbrekende afbeeldingen adlib, gevonden op rschijf
 def ir03():
     df_a03 = df_collectie[df_collectie['reproductie.referentie'].isna()]
     df_r03 = df_a03[df_a03['objectnummer'].isin(df_rschijflimited['objectnummer'])]
@@ -298,6 +306,7 @@ def ir03():
     df_r03 = df_r03[~df_r03['instelling.naam'].isna()]
     return df_r03
 
+#foutieve bestandsnaam
 def ir04():
     df_r04 = df_rschijf[(df_rschijf['objectnummer'].str.contains("a", na=False))
                         | (df_rschijf['objectnummer'].str.contains("b", na=False))
@@ -322,3 +331,9 @@ def ir05():
                             | (df_rschijf["objectnummer"].str.startswith("RE", na=False))
                             | (df_rschijf["objectnummer"].str.startswith("V", na=False)))]
     return df_r05
+
+# bestand in map bron, niet in map collectie
+def ir06():
+    df_r06 = df_bron[~df_bron['objectnummer'].isin(df_rschijf['objectnummer'])]
+    return df_r06
+

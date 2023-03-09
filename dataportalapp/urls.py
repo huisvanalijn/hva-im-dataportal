@@ -38,7 +38,6 @@ urlpatterns = [
     path('h030', views.h030),
     path('h031', views.h031),
     path('h032', views.h032),
-    path('h033', views.h033),
     path('ht01', views.ht01),
     path('ht02', views.ht02),
     path('ht03', views.ht03),
@@ -50,7 +49,8 @@ urlpatterns = [
     path('hr03', views.hr03),
     path('hr04', views.hr04),
     path('hr05', views.hr05),
-    path('hr06', views.hr05),
+    path('hr06', views.hr06),
+    path('hr07', views.hr07),
     path('i001', views.i001),
     path('i002', views.i002),
     path('i003', views.i003),
@@ -89,4 +89,5 @@ urlpatterns = [
     path('ir03', views.ir03),
     path('ir04', views.ir04),
     path('ir05', views.ir05),
+    path('ir06', views.ir06),
 ]

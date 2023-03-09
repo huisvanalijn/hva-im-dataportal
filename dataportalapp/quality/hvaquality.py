@@ -7,6 +7,7 @@ df_collectie = pd.read_csv(r'dataportalapp\static\data\hva\collectie.csv', delim
 df_thesaurus = pd.read_csv(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\thesaurus.csv', delimiter=';', low_memory=False)
 df_associaties = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\overzichtassociaties.xlsx')
 
+df_bron = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\bron.xlsx')
 df_rschijf = pd.read_excel(r'C:\Users\Verkesfl\OneDrive - Groep Gent\Bureaublad\hva-im-dataportal\dataportalapp\static\data\hva\rschijf.xlsx')
 df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("WERKMAP", na=False)]
 df_rschijf = df_rschijf[~df_rschijf['pad'].str.contains("EXTERNE SCHIJVEN", na=False)]
@@ -76,6 +77,9 @@ df_collectie['toestand'] = df_collectie['toestand']
 df_collectie['webpublicatie'] = df_collectie['webpublicatie']
 df_collectie['wijziging.datum'] = df_collectie['wijziging.datum']
 df_collectie['wijziging.naam'] = df_collectie['wijziging.naam']
+
+df_collectie['wijziging.naam'] = df_collectie['wijziging.naam'].str.split('$').str[0]
+df_collectie['wijziging.datum'] = df_collectie['wijziging.datum'].str.split('$').str[0]
 
 year = datetime.datetime.now().year
 
@@ -155,12 +159,25 @@ def h009():
     df_009 = df_collectie[df_collectie['associatie.onderwerp'].isna()]
     return df_009
 
-# ERROR NOT WORKING: vervaardiging plaats niet in associatie onderwerp
+# associatie komt niet voor in lijst associaties
 def h010():
-    df_010 = df_collectie[df_collectie['vervaardiging.plaats'].notna()]
-    df_010 = df_010[df_010['vervaardiging.plaats'] != '$']
-    df_010['vervaardiging.plaats'] = df_010['vervaardiging.plaats'].map(lambda x: x.lstrip('$').rstrip('$'))
-    df_010 = df_010[~df_010["vervaardiging.plaats"].isin(df_010["associatie.onderwerp"])]
+    df_asso = df_collectie['associatie.onderwerp'].str.split('$', expand=True)
+    aantal = len(df_asso.columns)
+
+    xs = []
+    for i in range(aantal):
+        xs.append(i)
+
+    df_010 = pd.concat([df_asso[xs].melt(value_name='associaties')])
+    df_010.mask(df_010.eq('None')).dropna()
+    df_010 = df_010[df_010['associaties'].notna()]
+    df_010 = df_010['associaties'].drop_duplicates()
+    df_010 = df_010.to_frame()
+    df_plaatsen = df_thesaurus[((df_thesaurus['term.soort'].str.contains("plaats", na=False)) | (df_thesaurus['term.soort'].str.contains("geografisch", na=False)))]
+    df_010["exists"] = df_010['associaties'].isin(df_plaatsen["term"])
+    df_010 = df_010.mask(df_010.eq(True)).dropna()
+    df_010['present'] = df_010['associaties'].isin(df_associaties['Trefwoord'])
+    df_010 = df_010.mask(df_010.eq(True)).dropna()
     return df_010
 
 # vervaardiging datering niet in associatie periode
@@ -331,50 +348,29 @@ def h029():
     df_029 = df_collectie[df_collectie['titel'].str.contains('|'.join(search), na=False)]
     return df_029
 
-# associatie komt niet voor in lijst associaties
+# foutieve vervaardiging datum begin precisie
 def h030():
-    df_asso = df_collectie['associatie.onderwerp'].str.split('$', expand=True)
-    aantal = len(df_asso.columns)
-
-    xs = []
-    for i in range(aantal):
-        xs.append(i)
-
-    df_030 = pd.concat([df_asso[xs].melt(value_name='associaties')])
-    df_030.mask(df_030.eq('None')).dropna()
-    df_030 = df_030[df_030['associaties'].notna()]
-    df_030 = df_030['associaties'].drop_duplicates()
-    df_030 = df_030.to_frame()
-    df_plaatsen = df_thesaurus[((df_thesaurus['term.soort'].str.contains("plaats", na=False)) | (df_thesaurus['term.soort'].str.contains("geografisch", na=False)))]
-    df_030["exists"] = df_030['associaties'].isin(df_plaatsen["term"])
-    df_030 = df_030.mask(df_030.eq(True)).dropna()
-    df_030['present'] = df_030['associaties'].isin(df_associaties['Trefwoord'])
-    df_030 = df_030.mask(df_030.eq(True)).dropna()
+    df_030 = df_collectie[df_collectie['vervaardiging.datum.begin.prec'].notna()]
+    df_030 = df_030[df_030['vervaardiging.datum.begin.prec'] != 'ca.']
+    df_030 = df_030[df_030['vervaardiging.datum.begin.prec'] != '$']
+    df_030 = df_030[df_030['vervaardiging.datum.begin.prec'] != 'na']
+    df_030 = df_030[df_030['vervaardiging.datum.begin.prec'] != 'voor']
+    df_030 = df_030[df_030['vervaardiging.datum.begin.prec'] != 'vanaf']
     return df_030
 
-# foutieve vervaardiging datum begin precisie
+# foutieve vervaardiging datum eind precisie
 def h031():
-    df_031 = df_collectie[df_collectie['vervaardiging.datum.begin.prec'].notna()]
-    df_031 = df_031[df_031['vervaardiging.datum.begin.prec'] != 'ca.']
-    df_031 = df_031[df_031['vervaardiging.datum.begin.prec'] != '$']
-    df_031 = df_031[df_031['vervaardiging.datum.begin.prec'] != 'na']
-    df_031 = df_031[df_031['vervaardiging.datum.begin.prec'] != 'voor']
-    df_031 = df_031[df_031['vervaardiging.datum.begin.prec'] != 'vanaf']
+    df_031 = df_collectie[df_collectie['vervaardiging.datum.eind.prec'].notna()]
+    df_031 = df_031[df_031['vervaardiging.datum.eind.prec'] != 'ca.']
+    df_031 = df_031[df_031['vervaardiging.datum.eind.prec'] != '$']
+    df_031 = df_031[df_031['vervaardiging.datum.eind.prec'] != 'voor']
     return df_031
 
-# foutieve vervaardiging datum eind precisie
-def h032():
-    df_032 = df_collectie[df_collectie['vervaardiging.datum.eind.prec'].notna()]
-    df_032 = df_032[df_032['vervaardiging.datum.eind.prec'] != 'ca.']
-    df_032 = df_032[df_032['vervaardiging.datum.eind.prec'] != '$']
-    df_032 = df_032[df_032['vervaardiging.datum.eind.prec'] != 'voor']
-    return df_032
-
 # ontbrekende uitleg bij bijzonderheden bij records in PD
-def h033():
-    df_033 = df_collectie[df_collectie['rechten.type'] == 'PUBLIC DOMAIN']
-    df_033 = df_033[df_033['rechten.bijzonderheden'].isna()]
-    return df_033
+def h032():
+    df_032 = df_collectie[df_collectie['rechten.type'] == 'PUBLIC DOMAIN']
+    df_032 = df_032[df_032['rechten.bijzonderheden'].isna()]
+    return df_032
 
 ##################################################################################################################################################
 # 2. THESAURUS
@@ -482,3 +478,8 @@ def hr06():
                             | (df_rschijf["objectnummer"].str.startswith("RE-", na=False))
                             | (df_rschijf["objectnummer"].str.startswith("VI-", na=False)))]
     return df_r06
+
+# bestand in map bron, niet in map collectie
+def hr07():
+    df_r07 = df_bron[~df_bron['objectnummer'].isin(df_rschijf['objectnummer'])]
+    return df_r07

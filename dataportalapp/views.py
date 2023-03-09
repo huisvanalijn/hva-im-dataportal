@@ -895,24 +895,6 @@ def h032(request):
     wb.save(response)
     return response
 
-def h033(request):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="#033.xlsx"'
-    df_033 = hvaquality.h033()
-    wb = Workbook()
-    if df_033.empty == True:
-        messages.success(request, 'Congrats! Empty list :)')
-        return render(request, 'hva.html')
-    else:
-        ws = wb.active
-        ws.title = '#033'
-        rows = dataframe_to_rows(df_033, index=False)
-        for r_idx, row in enumerate(rows, 1):
-            for c_idx, value in enumerate(row, 1):
-                ws.cell(row=r_idx, column=c_idx, value=value)
-    wb.save(response)
-    return response
-
 def ht01(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="#T01.xlsx"'
@@ -1123,6 +1105,24 @@ def hr06(request):
         ws = wb.active
         ws.title = '#R06'
         rows = dataframe_to_rows(df_r06, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def hr07(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R07.xlsx"'
+    df_r07 = hvaquality.hr07()
+    wb = Workbook()
+    if df_r07.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'hva.html')
+    else:
+        ws = wb.active
+        ws.title = '#R07'
+        rows = dataframe_to_rows(df_r07, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)
@@ -1814,6 +1814,24 @@ def ir05(request):
         ws = wb.active
         ws.title = '#R05'
         rows = dataframe_to_rows(df_r05, index=False)
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+    wb.save(response)
+    return response
+
+def ir06(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="#R06.xlsx"'
+    df_r06 = imquality.ir06()
+    wb = Workbook()
+    if df_r06.empty == True:
+        messages.success(request, 'Congrats! Empty list :)')
+        return render(request, 'im.html')
+    else:
+        ws = wb.active
+        ws.title = '#R06'
+        rows = dataframe_to_rows(df_r06, index=False)
         for r_idx, row in enumerate(rows, 1):
             for c_idx, value in enumerate(row, 1):
                 ws.cell(row=r_idx, column=c_idx, value=value)
