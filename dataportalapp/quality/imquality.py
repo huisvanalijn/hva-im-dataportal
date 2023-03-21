@@ -274,6 +274,7 @@ def it04():
 def it05():
     df_t05 = df_thesaurus[df_thesaurus['bron'] == 'http://vocab.getty.edu/aat/']
     df_t05 = df_t05[~df_t05['term.nummer'].isna()]
+    df_t05 = df_t05[~df_t05['term.nummer'].str.contains("Q", na=False)]
     df_t05 = df_t05['term.nummer'].astype(int)
     df_t05 = pd.DataFrame({'term': df_t05.values})
     df_t05 = df_t05[(df_t05['term'] > 999999999) | (df_t05['term'] < 100000000)]
@@ -283,6 +284,7 @@ def it05():
 def it06():
     df_t06 = df_thesaurus[df_thesaurus['bron'] == 'http://vocab.getty.edu/tgn/']
     df_t06 = df_t06[~df_t06['term.nummer'].isna()]
+    df_t06 = df_t06[~df_t06['term.nummer'].str.contains("Q", na=False)]
     df_t06 = df_t06['term.nummer'].astype(int)
     df_t06 = pd.DataFrame({'term': df_t06.values})
     df_t06 = df_t06[(df_t06['term'] > 9999999) | (df_t06['term'] < 1000000)]
